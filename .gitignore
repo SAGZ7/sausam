@@ -1,0 +1,13 @@
+﻿# Docker
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files (los agregaremos con .example)
+.env
