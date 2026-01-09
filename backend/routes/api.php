@@ -22,6 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/users', [UserController::class, 'store']);
         Route::put('/users/{user}', [UserController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
-        Route::get('/users/export/csv', [UserController::class, 'export']);
+        Route::get('/users-export', [UserController::class, 'export']);
     });
 });

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -37,6 +38,11 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        \Log::info('Login attempt', [
+            'email' => $request->email,
+            'password_length' => strlen($request->password)
+        ]);
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -44,7 +50,20 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        \Log::info('User found', ['user' => $user ? $user->email : 'not found']);
+
+        if (!$user) {
+            \Log::info('User not found');
+            throw ValidationException::withMessages([
+                'email' => ['Las credenciales son incorrectas.'],
+            ]);
+        }
+
+        $hashCheck = Hash::check($request->password, $user->password);
+        \Log::info('Hash check result', ['result' => $hashCheck]);
+
+        if (!$hashCheck) {
+            \Log::info('Hash check failed');
             throw ValidationException::withMessages([
                 'email' => ['Las credenciales son incorrectas.'],
             ]);

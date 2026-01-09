@@ -11,3 +11,5 @@ Thumbs.db
 
 # Env files (los agregaremos con .example)
 .env
+backend/.env.testing
+.gitignore

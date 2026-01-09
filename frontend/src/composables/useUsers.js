@@ -40,9 +40,32 @@ export function useUsers() {
     await api.delete(`/users/${id}`)
   }
 
-  const exportUsers = () => {
-    window.open('http://localhost:8000/api/users/export/csv', '_blank')
+  const exportUsers = async () => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await fetch('http://localhost:8000/api/users-export', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    })
+    
+    if (!response.ok) throw new Error('Error al exportar')
+    
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `usuarios-${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    a.remove()
+  } catch (err) {
+    console.error('Error al exportar:', err)
+    alert('Error al exportar usuarios')
   }
+}
 
   return {
     users,

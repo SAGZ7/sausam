@@ -26,16 +26,20 @@ export function useAuth() {
     return response.data
   }
 
-  const logout = async () => {
-    try {
-      await api.post('/logout')
-    } finally {
-      token.value = null
-      user.value = null
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-    }
+const logout = async () => {
+  try {
+    token.value = null
+    user.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    
+    api.post('/logout').catch(() => {
+      // Ignorar errores del backend, ya cerramos sesión localmente
+    })
+  } catch (err) {
+    // Ignorar cualquier error
   }
+}
 
   return {
     user,
