@@ -18,7 +18,7 @@
         </span>
       </div>
     </Transition>
-    
+
     <Transition name="fade-slide">
       <div v-if="showModal" class="absolute top-6 right-6 z-20">
         <div class="flex gap-1 bg-white/90 backdrop-blur-sm rounded-full shadow-lg p-1 border border-gray-100">
@@ -142,14 +142,14 @@
                   <div class="w-2 h-2 rounded-full bg-gray-600 mr-2 group-hover:animate-pulse"></div>
                   <span class="font-bold text-gray-700">{{ t.login.admin }}</span>
                 </div>
-                <span class="font-mono text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200">admin@sausam.com</span>
+                <span class="font-mono text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200">admin@sausam.com / password</span>
               </div>
               <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-white transition-colors">
                 <div class="flex items-center">
                   <div class="w-2 h-2 rounded-full bg-gray-800 mr-2 group-hover:animate-pulse"></div>
                   <span class="font-bold text-gray-700">{{ t.login.user }}</span>
                 </div>
-                <span class="font-mono text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200">user@sausam.com</span>
+                <span class="font-mono text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200">user@sausam.com / password</span>
               </div>
             </div>
           </div>

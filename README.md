@@ -1,50 +1,64 @@
 ﻿# SAUSAM - Sistema de Administración de Usuarios de Samuel García
 
-Sistema CRUD completo de gestión de usuarios con autenticación, roles y exportación a CSV.
+Sistema CRUD completo de gestión de usuarios con autenticación, sistema de roles, exportación a CSV e internacionalización (Español/Inglés).
 
-![SAUSAM Dashboard](https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![Vue](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-## 🚀 Características
+## Características Principales
 
-- **CRUD Completo** de usuarios con validación frontend y backend
-- **Autenticación** con Laravel Sanctum (token-based)
-- **Sistema de Roles** (Administrador y Usuario)
-- **Exportación a CSV** para administradores
-- **Paginación** de resultados
-- **API RESTful** documentada
-- **Interfaz responsive** con Tailwind CSS
-- **Protección XSS** automática
-- **Dockerizado** para fácil despliegue
+### Backend (Laravel 11)
+- CRUD Completo de usuarios con validación robusta
+- Autenticación API con Laravel Sanctum (token-based)
+- Sistema de Roles (Administrador y Usuario Regular)
+- Middleware personalizado para protección de rutas por rol
+- Exportación a CSV con Laravel Excel
+- API RESTful con responses consistentes
+- Tests unitarios (PHPUnit) - 14 tests pasando
+- Migraciones y Seeders con datos de prueba
 
-## 🛠️ Stack Tecnológico
-
-### Backend
-- **Laravel 11** - Framework PHP
-- **PostgreSQL 15** - Base de datos
-- **Laravel Sanctum** - Autenticación API
-- **Laravel Excel** - Exportación CSV
-
-### Frontend
-- **Vue 3** (Composition API)
-- **Vite 5** - Build tool
-- **Vue Router 4** - Enrutamiento
-- **Axios** - Cliente HTTP
-- **Tailwind CSS 3** - Estilos
-- **Vuelidate** - Validación de formularios
+### Frontend (Vue 3 + Composition API)
+- Interfaz moderna estilo Linear/Enterprise con Tailwind CSS
+- Internacionalización (i18n) Español/Inglés
+- Autenticación persistente con localStorage
+- CRUD interactivo con modales y validación en tiempo real
+- Paginación de resultados
+- Búsqueda en tiempo real de usuarios
+- Protección XSS automática de Vue
+- Diseño responsive mobile-first
+- Animaciones y transiciones suaves
 
 ### DevOps
-- **Docker** - Contenedorización
-- **Docker Compose** - Orquestación
+- Containerización completa con Docker Compose
+- PostgreSQL 15 en contenedor
+- Hot-reload en desarrollo (Vite)
+- Volúmenes persistentes para la base de datos
 
-## Requisitos Previos
+## Stack Tecnológico
 
-- Docker Desktop instalado
-- Git
-- Navegador web moderno
+### Backend
+- **Framework:** Laravel 11.x
+- **Lenguaje:** PHP 8.3
+- **Autenticación:** Laravel Sanctum
+- **Base de datos:** PostgreSQL 15
+- **Exportación:** Laravel Excel (Maatwebsite)
+- **Testing:** PHPUnit
 
-## Instalación
+### Frontend
+- **Framework:** Vue 3 (Composition API)
+- **Build Tool:** Vite 5.x
+- **Router:** Vue Router 4.x
+- **HTTP Client:** Axios
+- **Estilos:** Tailwind CSS 3.x
+- **Validación:** Vuelidate
+
+### Infraestructura
+- **Containerización:** Docker & Docker Compose
+- **Base de datos:** PostgreSQL 15 Alpine
+
+## Instalación y Configuración
 
 ### 1. Clonar el repositorio
 ```bash
@@ -52,17 +66,17 @@ git clone https://github.com/SAGZ7/sausam.git
 cd sausam
 ```
 
-### 2. Levantar contenedores
+### 2. Levantar los contenedores
 ```bash
 docker-compose up -d
 ```
 
-Esto levantará:
+Esto iniciará automáticamente:
 - PostgreSQL en puerto `5432`
 - Backend Laravel en puerto `8000`
 - Frontend Vue en puerto `5173`
 
-### 3. Configurar backend
+### 3. Configurar el backend
 ```bash
 # Generar APP_KEY
 docker exec sausam_backend php artisan key:generate
@@ -76,19 +90,19 @@ docker exec sausam_backend php artisan db:seed --class=UserSeeder
 
 ### 4. Acceder a la aplicación
 
-Abre tu navegador en: **http://localhost:5173**
+Abrir en el navegador: **http://localhost:5173**
 
-## 👤 Usuarios de Prueba
+## Usuarios de Prueba
 
 ### Administrador
 - **Email:** admin@sausam.com
 - **Contraseña:** password
-- **Permisos:** CRUD completo + Exportar CSV
+- **Permisos:** CRUD completo, exportación CSV, gestión de roles
 
 ### Usuario Regular
 - **Email:** user@sausam.com
 - **Contraseña:** password
-- **Permisos:** Solo lectura
+- **Permisos:** Solo lectura de usuarios
 
 ## API Endpoints
 
@@ -96,38 +110,118 @@ Abre tu navegador en: **http://localhost:5173**
 ```
 POST   /api/register    - Registrar nuevo usuario
 POST   /api/login       - Iniciar sesión
-POST   /api/logout      - Cerrar sesión
-GET    /api/me          - Usuario autenticado
+POST   /api/logout      - Cerrar sesión (requiere auth)
+GET    /api/me          - Obtener usuario autenticado
 ```
 
-### Usuarios (requiere autenticación)
+### Gestión de Usuarios (requiere autenticación)
 ```
 GET    /api/users           - Listar usuarios (paginado)
 GET    /api/users/{id}      - Ver usuario específico
 POST   /api/users           - Crear usuario (solo admin)
 PUT    /api/users/{id}      - Actualizar usuario (solo admin)
 DELETE /api/users/{id}      - Eliminar usuario (solo admin)
-GET    /api/users/export/csv - Exportar CSV (solo admin)
+GET    /api/users-export    - Exportar usuarios a CSV (solo admin)
 ```
 
-### Ejemplo de Request
+
+## Características de Seguridad
+
+- Contraseñas hasheadas con bcrypt
+- Autenticación basada en tokens (Sanctum)
+- Middleware de roles para proteger rutas sensibles
+- Validación de datos en frontend y backend
+- Protección CSRF
+- Headers CORS configurados correctamente
+- Protección XSS automática de Vue
+- Tokens con expiración configurable
+
+## Testing
+
+### Ejecutar tests del backend
 ```bash
-# Login
-curl -X POST http://localhost:8000/api/login \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"email":"admin@sausam.com","password":"password"}'
-
-# Obtener usuarios (con token)
-curl -X GET http://localhost:8000/api/users \
-  -H "Authorization: Bearer {tu-token}" \
-  -H "Accept: application/json"
+# Ejecutar todos los tests
+docker exec sausam_backend php artisan test
 ```
+
+**Tests implementados:**
+- Registro de usuarios
+- Login con credenciales válidas e inválidas
+- Logout
+- Listar usuarios (admin y user)
+- Crear usuario (solo admin)
+- Actualizar usuario (solo admin)
+- Eliminar usuario (solo admin)
+- Protección de rutas no autenticadas
+
+**Resultado:** 14 tests, 50 assertions - PASS
+
+## Capturas de Pantalla
+
+### Vista de Login
+![Login](docs/screenshots/login.png)
+
+### Dashboard Principal
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Gestión de Usuarios
+![Users](docs/screenshots/users.png)
+
+## Video Demostración
+
+Ver video completo de demostración del sistema: [SAUSAM - Demo en YouTube](TU_LINK_DE_YOUTUBE_AQUI)
+
+## Notas de Desarrollo
+
+### Decisiones Técnicas
+
+1. **Laravel Sanctum** Se eligió Sanctum por ser la solución oficial de Laravel para SPAs, más simple de implementar y mantener.
+
+2. **Composition API** Se utilizó Composition API de Vue 3 por ser más moderno, permitir mejor reutilización de lógica y mejor tipado.
+
+3. **Tailwind CSS** Elegido por permitir desarrollo rápido, diseño consistente y producir CSS optimizado en producción.
+
+4. **Docker** Facilita la portabilidad del proyecto y garantiza que funcione igual en cualquier entorno.
+
+5. **PostgreSQL** PostgreSQL elegido por sus características enterprise, mejor soporte para JSON y tipos de datos avanzados.
+
+### Buenas Prácticas Implementadas
+
+- Código modular y reutilizable (composables en Vue)
+- Separación de responsabilidades (Controllers, Services, Models)
+- Validación en frontend y backend (defensa en profundidad)
+- Nombres descriptivos de variables y funciones
+- Commits atómicos con mensajes descriptivos
+- Migraciones versionadas para control de cambios en BD
+- Seeders para datos de prueba reproducibles
+- Tests automatizados para features críticas
+
+## Problemas Conocidos y Soluciones
+
+### El frontend no carga los usuarios
+**Causa:** Backend no está conectado a PostgreSQL
+**Solución:** Verificar que el `.env` tenga `DB_CONNECTION=pgsql` y no `sqlite`
+
+### Error 422 en login
+**Causa:** Hash de contraseñas no coincide
+**Solución:** Recrear usuarios con `php artisan db:seed --class=UserSeeder`
+
+### Docker no inicia
+**Causa:** Virtualización no habilitada en BIOS
+**Solución:** Habilitar Intel VT-x o AMD-V en BIOS
+
+## Recursos Adicionales
+
+- [Documentación de Laravel 11](https://laravel.com/docs/11.x)
+- [Documentación de Vue 3](https://vuejs.org/guide/introduction.html)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 ## Estructura del Proyecto
 ```
 sausam/
-├── backend/                 # Laravel
+├── backend/                      # Laravel 11 API
 │   ├── app/
 │   │   ├── Http/
 │   │   │   ├── Controllers/API/
@@ -141,12 +235,23 @@ sausam/
 │   │       └── UsersExport.php
 │   ├── database/
 │   │   ├── migrations/
+│   │   │   ├── create_users_table.php
+│   │   │   ├── create_personal_access_tokens_table.php
+│   │   │   └── add_role_and_phone_to_users_table.php
 │   │   └── seeders/
-│   └── routes/
-│       └── api.php
+│   │       └── UserSeeder.php
+│   ├── routes/
+│   │   └── api.php
+│   ├── tests/
+│   │   └── Feature/
+│   │       ├── AuthTest.php
+│   │       └── UserTest.php
+│   └── Dockerfile
 │
-├── frontend/                # Vue 3 SPA
+├── frontend/                     # Vue 3 SPA
 │   ├── src/
+│   │   ├── assets/
+│   │   │   └── morelia-skyline.png
 │   │   ├── components/
 │   │   ├── views/
 │   │   │   ├── Login.vue
@@ -154,85 +259,38 @@ sausam/
 │   │   │   └── Users.vue
 │   │   ├── composables/
 │   │   │   ├── useAuth.js
-│   │   │   └── useUsers.js
+│   │   │   ├── useUsers.js
+│   │   │   └── useLocale.js
+│   │   ├── locales/
+│   │   │   ├── es.js
+│   │   │   └── en.js
 │   │   ├── router/
 │   │   │   └── index.js
-│   │   └── services/
-│   │       └── api.js
-│   └── tailwind.config.js
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   ├── App.vue
+│   │   ├── main.js
+│   │   └── style.css
+│   ├── public/
+│   │   └── favicon.svg
+│   ├── index.html
+│   ├── package.json
+│   ├── tailwind.config.js
+│   ├── vite.config.js
+│   └── Dockerfile
 │
-└── docker-compose.yml
+├── docker-compose.yml
+├── .env.example
+└── README.md
 ```
 
-## Seguridad
 
-- Passwords hasheados con bcrypt
-- Autenticación basada en tokens
-- Middleware de roles para proteger rutas
-- Validación de datos en frontend y backend
-- Protección CSRF
-- Headers CORS configurados
-- Protección XSS automática de Vue
+Este proyecto fue desarrollado como prueba técnica - Enero 2025
 
-## 🧪 Testing
-```bash
-# Tests backend (Laravel)
-docker exec sausam_backend php artisan test
 
-# Tests frontend (Vue)
-docker exec sausam_frontend npm run test
-```
-
-## 📦 Comandos Útiles
-```bash
-# Ver logs
-docker-compose logs -f
-
-# Detener contenedores
-docker-compose down
-
-# Rebuild completo
-docker-compose down
-docker-compose build --no-cache
-docker-compose up -d
-
-# Acceder al contenedor backend
-docker exec -it sausam_backend bash
-
-# Limpiar caché Laravel
-docker exec sausam_backend php artisan cache:clear
-docker exec sausam_backend php artisan config:clear
-```
-
-## Capturas de Pantalla
-
-### Login
-![Login](docs/screenshots/login.png)
-
-### Dashboard
-![Dashboard](docs/screenshots/dashboard.png)
-
-### Gestión de Usuarios
-![Users](docs/screenshots/users.png)
-
-## Notas de Desarrollo
-
-- Desarrollado con Docker para garantizar portabilidad
-- Arquitectura API REST con separación frontend/backend
-- Código limpio siguiendo estándares PSR-12 (PHP) y Vue Style Guide
-- Responsive design mobile-first
-- Optimizado para producción
-
-## Autor
-
-**Samuel García**
-- GitHub: [@SAGZ7](https://github.com/SAGZ7)
-- Proyecto: Prueba Técnica - Enero 2025
-
-## Licencia
-
-Este proyecto fue desarrollado como prueba técnica.
+- Proyecto: SAUSAM (Sistema de Administración de Usuarios)
+- Fecha: Enero 2025
 
 ---
 
-**Desarrollado con ❤️ usando Laravel + Vue + Docker**
+**Desarrollado con Laravel 11 + Vue 3 + PostgreSQL + Docker**
