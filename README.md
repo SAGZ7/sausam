@@ -17,6 +17,12 @@ git clone https://github.com/SAGZ7/sausam.git
 cd sausam
 ```
 
+### Linux / macOS
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
 ### Windows
 Ejecutar el script de instalación automática:
 ```powershell
@@ -35,18 +41,18 @@ cd sausam
 
 ### Paso 2: Construir las imágenes de Docker
 ```bash
-docker-compose build
+docker compose build
 ```
 **NOTA:** Este paso tarda aproximadamente 10 minutos la primera vez porque instala todas las dependencias. Solo es necesario hacerlo una vez.
 
 ### Paso 3: Levantar los contenedores
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 **Verificar que los servicios hayan iniciado correctamente:**
 ```bash
-docker-compose logs -f backend
+docker compose logs -f backend
 ```
 
 Continuar hasta ver el mensaje:
@@ -88,19 +94,19 @@ Abrir en el navegador: **http://localhost:5173**
 
 ### Detener los contenedores
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Reiniciar los contenedores (rápido, sin rebuild)
 ```bash
-docker-compose down
-docker-compose up -d
+docker compose down
+docker compose up -d
 ```
 
 ### Ver logs en tiempo real
 ```bash
-docker-compose logs -f backend
-docker-compose logs -f frontend
+docker compose logs -f backend
+docker compose logs -f frontend
 ```
 
 ### Ejecutar tests unitarios
@@ -111,7 +117,7 @@ Resultado esperado: 14 tests, 50 assertions - PASS
 
 ### Limpiar completamente (eliminar datos)
 ```bash
-docker-compose down -v
+docker compose down -v
 docker system prune -af
 ```
 

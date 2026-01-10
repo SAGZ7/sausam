@@ -9,7 +9,7 @@ Write-Host ""
 # Paso 1: Build
 Write-Host "[1/5] Construyendo imágenes de Docker..." -ForegroundColor Yellow
 Write-Host "Esto puede tardar 10-15 minutos la primera vez." -ForegroundColor Gray
-docker-compose build
+docker compose build
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error en el build. Abortando." -ForegroundColor Red
     exit 1
@@ -19,7 +19,7 @@ Write-Host ""
 
 # Paso 2: Up
 Write-Host "[2/5] Levantando contenedores..." -ForegroundColor Yellow
-docker-compose up -d
+docker compose up -d
 Write-Host "Contenedores iniciados!" -ForegroundColor Green
 Write-Host ""
 
@@ -35,7 +35,7 @@ while ($elapsed -lt $timeout -and -not $ready) {
     Start-Sleep -Seconds 3
     $elapsed += 3
 
-    $logs = docker-compose logs backend 2>&1 | Select-String "Server running"
+    $logs = docker compose logs backend 2>&1 | Select-String "Server running"
     if ($logs) {
         $ready = $true
         Write-Host "Backend listo!" -ForegroundColor Green
