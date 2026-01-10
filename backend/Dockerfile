@@ -32,9 +32,6 @@ WORKDIR /var/www
 # Copiar archivos
 COPY . .
 
-# Copiar .env.example a .env si no existe
-RUN cp -n .env.example .env || true
-
 # Dar permisos
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
@@ -43,8 +40,7 @@ RUN chown -R www-data:www-data /var/www \
 # Exponer puerto
 EXPOSE 8000
 
-# Script de inicio
+# Script de inicio (sin key:generate)
 CMD composer install --no-interaction --prefer-dist --ignore-platform-reqs && \
-    php artisan key:generate --force && \
     php artisan migrate --force && \
     php artisan serve --host=0.0.0.0 --port=8000
