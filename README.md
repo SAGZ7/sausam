@@ -9,6 +9,24 @@ Sistema CRUD completo de gestión de usuarios con autenticación, sistema de rol
 
 ## Cómo iniciar el proyecto
 
+## Instalación Rápida (Recomendada):
+
+### Paso 1: Clonar el repositorio
+```bash
+git clone https://github.com/SAGZ7/sausam.git
+cd sausam
+```
+
+### Windows
+Ejecutar el script de instalación automática:
+```powershell
+.\setup.ps1
+```
+
+El script realizará todos los pasos automáticamente y abrirá la aplicación en el navegador.
+
+## Instalación paso a paso:
+
 ### Paso 1: Clonar el repositorio
 ```bash
 git clone https://github.com/SAGZ7/sausam.git
@@ -19,12 +37,25 @@ cd sausam
 ```bash
 docker-compose build
 ```
-**NOTA:** Este paso tarda aproximadamente 10-15 minutos la primera vez porque instala todas las dependencias de PHP y Node.js. Solo es necesario hacerlo una vez.
+**NOTA:** Este paso tarda aproximadamente 10 minutos la primera vez porque instala todas las dependencias. Solo es necesario hacerlo una vez.
 
 ### Paso 3: Levantar los contenedores
 ```bash
 docker-compose up -d
 ```
+
+**Verificar que los servicios hayan iniciado correctamente:**
+```bash
+docker-compose logs -f backend
+```
+
+Continuar hasta ver el mensaje:
+```
+INFO  Server running on [http://0.0.0.0:8000]
+```
+
+Presionar **Ctrl+C** para salir de los logs.
+
 Los servicios estarán disponibles en:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
