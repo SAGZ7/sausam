@@ -25,11 +25,7 @@ services:
     container_name: sausam_backend
     restart: unless-stopped
     working_dir: /var/www
-    volumes:
-      - ./backend:/var/www
-      - /var/www/vendor
-      - ./backend/storage:/var/www/storage
-      - ./backend/bootstrap/cache:/var/www/bootstrap/cache
+    # QUITAR TODOS LOS VOLUMES - el código ya está en la imagen
     ports:
       - "8000:8000"
     depends_on:
