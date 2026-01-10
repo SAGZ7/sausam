@@ -9,29 +9,28 @@ Sistema CRUD completo de gestión de usuarios con autenticación, sistema de rol
 
 ## Cómo iniciar el proyecto
 
-### Requisitos
-- Docker Desktop instalado y corriendo
-- Git
-
 ### Paso 1: Clonar el repositorio
 ```bash
 git clone https://github.com/SAGZ7/sausam.git
 cd sausam
 ```
 
-### Paso 2: Levantar los contenedores
+### Paso 2: Construir las imágenes de Docker
+```bash
+docker-compose build
+```
+**NOTA:** Este paso tarda aproximadamente 10-15 minutos la primera vez porque instala todas las dependencias de PHP y Node.js. Solo es necesario hacerlo una vez.
+
+### Paso 3: Levantar los contenedores
 ```bash
 docker-compose up -d
 ```
+Los servicios estarán disponibles en:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- PostgreSQL: localhost:5432
 
-**IMPORTANTE:** El backend tardará aproximadamente 2 minutos en iniciar porque instala las dependencias de Composer automáticamente. Puedes ver el progreso con:
-```bash
-docker-compose logs -f backend
-```
-Espera hasta ver el mensaje: `INFO  Server running on [http://0.0.0.0:8000]`
-
-### Paso 3: Configurar el backend
-Una vez que el backend haya terminado de iniciar, ejecuta:
+### Paso 4: Configurar el backend
 ```bash
 # Copiar archivo de configuración
 docker exec sausam_backend cp .env.example .env
@@ -46,12 +45,44 @@ docker exec sausam_backend php artisan migrate --force
 docker exec sausam_backend php artisan db:seed --class=UserSeeder --force
 ```
 
-### Paso 4: Acceder a la aplicación
+### Paso 5: Acceder a la aplicación
 Abrir en el navegador: **http://localhost:5173**
 
 ### Usuarios de Prueba
-- **Administrador:** admin@sausam.com / password
-- **Usuario Regular:** user@sausam.com / password
+- **Administrador:** admin@sausam.com / password (Acceso completo: CRUD, exportación CSV)
+- **Usuario Regular:** user@sausam.com / password (Solo lectura)
+
+---
+
+
+### Detener los contenedores
+```bash
+docker-compose down
+```
+
+### Reiniciar los contenedores (rápido, sin rebuild)
+```bash
+docker-compose down
+docker-compose up -d
+```
+
+### Ver logs en tiempo real
+```bash
+docker-compose logs -f backend
+docker-compose logs -f frontend
+```
+
+### Ejecutar tests unitarios
+```bash
+docker exec sausam_backend php artisan test
+```
+Resultado esperado: 14 tests, 50 assertions - PASS
+
+### Limpiar completamente (eliminar datos)
+```bash
+docker-compose down -v
+docker system prune -af
+```
 
 ### Backend (Laravel 11)
 - CRUD Completo de usuarios con validación robusta
