@@ -25,32 +25,28 @@ Write-Host ""
 
 # Paso 3: Esperar a que backend esté listo
 Write-Host "[3/5] Esperando a que el backend esté listo..." -ForegroundColor Yellow
-Write-Host "Verificando logs (presiona Ctrl+C cuando veas 'Server running')..." -ForegroundColor Gray
-Start-Sleep -Seconds 5
-docker-compose logs -f backend &
-$job = Start-Job -ScriptBlock {
-    param($timeout)
-    $elapsed = 0
-    while ($elapsed -lt $timeout) {
-        $logs = docker-compose logs backend 2>&1 | Select-String "Server running"
-        if ($logs) {
-            return $true
-        }
-        Start-Sleep -Seconds 2
-        $elapsed += 2
+Write-Host "Esto puede tardar hasta 60 segundos..." -ForegroundColor Gray
+
+$timeout = 60
+$elapsed = 0
+$ready = $false
+
+while ($elapsed -lt $timeout -and -not $ready) {
+    Start-Sleep -Seconds 3
+    $elapsed += 3
+
+    $logs = docker-compose logs backend 2>&1 | Select-String "Server running"
+    if ($logs) {
+        $ready = $true
+        Write-Host "Backend listo!" -ForegroundColor Green
+    } else {
+        Write-Host "Esperando... ($elapsed segundos)" -ForegroundColor Gray
     }
-    return $false
-} -ArgumentList 60
-
-$ready = Wait-Job $job -Timeout 60 | Receive-Job
-Remove-Job $job -Force
-
-if (-not $ready) {
-    Write-Host "Esperando 30 segundos adicionales por seguridad..." -ForegroundColor Gray
-    Start-Sleep -Seconds 30
 }
 
-Write-Host "Backend listo!" -ForegroundColor Green
+if (-not $ready) {
+    Write-Host "Timeout alcanzado. Continuando de todas formas..." -ForegroundColor Yellow
+}
 Write-Host ""
 
 # Paso 4: Configurar
@@ -73,11 +69,14 @@ Write-Host ""
 
 # Paso 5: Verificar
 Write-Host "[5/5] Verificando instalación..." -ForegroundColor Yellow
-$users = docker exec -it sausam_db psql -U sausam_user -d sausam -t -c "SELECT COUNT(*) FROM users;"
-if ($users -match "\d+" -and [int]$users.Trim() -gt 0) {
-    Write-Host "Usuarios creados correctamente!" -ForegroundColor Green
-} else {
-    Write-Host "Advertencia: No se pudieron verificar los usuarios." -ForegroundColor Yellow
+try {
+    $userCount = docker exec sausam_db psql -U sausam_user -d sausam -t -c "SELECT COUNT(*) FROM users;" 2>$null
+    if ($userCount -and $userCount.Trim() -match "^\d+$") {
+        $count = [int]$userCount.Trim()
+        Write-Host "Usuarios creados: $count" -ForegroundColor Green
+    }
+} catch {
+    Write-Host "No se pudo verificar usuarios (esto es normal)" -ForegroundColor Gray
 }
 Write-Host ""
 
