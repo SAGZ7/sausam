@@ -68,7 +68,6 @@ export default {
     email: 'Email',
     phone: 'Teléfono',
     role: 'Rol',
-    actions: 'Acciones',
     edit: 'Editar',
     delete: 'Eliminar',
     deleteConfirm: '¿Está seguro de eliminar a {name}?',

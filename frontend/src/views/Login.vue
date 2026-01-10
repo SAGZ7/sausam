@@ -133,24 +133,6 @@
               <span>{{ loading ? t.login.loading : t.login.submit }}</span>
             </button>
           </form>
-
-          <div class="mt-8 pt-6 border-t border-gray-200">
-            <p class="text-center text-xs text-gray-500 uppercase tracking-widest font-semibold mb-4">{{ t.login.demoUsers }}</p>
-            <div class="grid grid-cols-1 gap-2 text-xs">
-              <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-white transition-colors cursor-help group">
-                <div class="flex items-center">
-                  <div class="w-2 h-2 rounded-full bg-gray-600 mr-2 group-hover:animate-pulse"></div>
-                  <span class="font-bold text-gray-700">{{ t.login.admin }}</span>
-                </div>
-              </div>
-              <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-white transition-colors">
-                <div class="flex items-center">
-                  <div class="w-2 h-2 rounded-full bg-gray-800 mr-2 group-hover:animate-pulse"></div>
-                  <span class="font-bold text-gray-700">{{ t.login.user }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </Transition>
       
