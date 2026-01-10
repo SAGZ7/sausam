@@ -7,7 +7,51 @@ Sistema CRUD completo de gestión de usuarios con autenticación, sistema de rol
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-## Características Principales
+## Cómo iniciar el proyecto
+
+### Requisitos
+- Docker Desktop instalado y corriendo
+- Git
+
+### Paso 1: Clonar el repositorio
+```bash
+git clone https://github.com/SAGZ7/sausam.git
+cd sausam
+```
+
+### Paso 2: Levantar los contenedores
+```bash
+docker-compose up -d
+```
+
+**IMPORTANTE:** El backend tardará aproximadamente 2 minutos en iniciar porque instala las dependencias de Composer automáticamente. Puedes ver el progreso con:
+```bash
+docker-compose logs -f backend
+```
+Espera hasta ver el mensaje: `INFO  Server running on [http://0.0.0.0:8000]`
+
+### Paso 3: Configurar el backend
+Una vez que el backend haya terminado de iniciar, ejecuta:
+```bash
+# Copiar archivo de configuración
+docker exec sausam_backend cp .env.example .env
+
+# Generar clave de aplicación
+docker exec sausam_backend php artisan key:generate
+
+# Ejecutar migraciones
+docker exec sausam_backend php artisan migrate --force
+
+# Crear usuarios de prueba
+docker exec sausam_backend php artisan db:seed --class=UserSeeder --force
+```
+
+### Paso 4: Acceder a la aplicación
+Abrir en el navegador: **http://localhost:5173**
+
+### Usuarios de Prueba
+- **Administrador:** admin@sausam.com / password
+- **Usuario Regular:** user@sausam.com / password
 
 ### Backend (Laravel 11)
 - CRUD Completo de usuarios con validación robusta
@@ -58,51 +102,6 @@ Sistema CRUD completo de gestión de usuarios con autenticación, sistema de rol
 - **Containerización:** Docker & Docker Compose
 - **Base de datos:** PostgreSQL 15 Alpine
 
-## Instalación y Configuración
-
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/SAGZ7/sausam.git
-cd sausam
-```
-
-### 2. Levantar los contenedores
-```bash
-docker-compose up -d
-```
-
-Esto iniciará automáticamente:
-- PostgreSQL en puerto `5432`
-- Backend Laravel en puerto `8000`
-- Frontend Vue en puerto `5173`
-
-### 3. Configurar el backend
-```bash
-# Generar APP_KEY
-docker exec sausam_backend php artisan key:generate
-
-# Ejecutar migraciones
-docker exec sausam_backend php artisan migrate
-
-# Crear usuarios de prueba
-docker exec sausam_backend php artisan db:seed --class=UserSeeder
-```
-
-### 4. Acceder a la aplicación
-
-Abrir en el navegador: **http://localhost:5173**
-
-## Usuarios de Prueba
-
-### Administrador
-- **Email:** admin@sausam.com
-- **Contraseña:** password
-- **Permisos:** CRUD completo, exportación CSV, gestión de roles
-
-### Usuario Regular
-- **Email:** user@sausam.com
-- **Contraseña:** password
-- **Permisos:** Solo lectura de usuarios
 
 ## API Endpoints
 
